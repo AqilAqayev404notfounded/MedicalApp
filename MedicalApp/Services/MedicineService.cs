@@ -40,9 +40,9 @@ public class MedicineService
                 return item;
             }
         }
-        throw new NotImplementedException("bu Name yoxdur");
+        throw new NotFoundException("bu Name yoxdur");
     }
-    public Medicine GetMedicineByCategory(int catagoryId)
+    public void GetMedicineByCategory(int catagoryId)
     {
         foreach (var item in DB.Medicines)
         {
@@ -50,9 +50,9 @@ public class MedicineService
             {
                 //return $"CatagoryId = {item.CategoryId}"//;
                 Console.WriteLine($"catagory Id :{item.CategoryId} , Adi :{item.Name} Qiymeti :{item.Price} ");
+
             }
         }
-        throw new NotImplementedException("bu Id yoxdur");
 
     }
     public void RemoveMedicine(int id)
