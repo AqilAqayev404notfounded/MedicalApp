@@ -34,7 +34,7 @@ public class MedicineService
 
 
         }
-        throw new NotFoundException("bu id yoxdur");
+        throw new NotFoundException("this id does not exist");
 
     }
     public Medicine GetMedicineByName(string name)
@@ -46,7 +46,7 @@ public class MedicineService
                 return item;
             }
         }
-        throw new NotFoundException("bu Name yoxdur");
+        throw new NotFoundException("This Name does not exist");
     }
     public void GetMedicineByCategory(int catagoryId)
     {
@@ -55,7 +55,7 @@ public class MedicineService
             if (item.CategoryId == catagoryId)
             {
                 //return $"CatagoryId = {item.CategoryId}"//;
-                Console.WriteLine($"catagory Id :{item.CategoryId} , Adi :{item.Name} Qiymeti :{item.Price} ");
+                Console.WriteLine($"catagory Id :{item.CategoryId} , Name :{item.Name} Price :{item.Price}$ , Date : {item.CreatedDate} ");
 
             }
         }
@@ -75,7 +75,7 @@ public class MedicineService
 
                 }
                 Array.Resize(ref DB.Medicines,DB.Medicines.Length-1);
-                Console.WriteLine("ugurla silindi");
+                Console.WriteLine("deleted");
             }
         }
 
@@ -88,10 +88,11 @@ public class MedicineService
             item.Name = medicine.Name;
             item.Price = medicine.Price;
             item.CategoryId = medicine.CategoryId;
+            item.CreatedDate = medicine.CreatedDate;
             return;
 
         }
-        throw new NotFoundException("bu Id yoxdur");
+        throw new NotFoundException("This Id does not exist");
     }
 
 

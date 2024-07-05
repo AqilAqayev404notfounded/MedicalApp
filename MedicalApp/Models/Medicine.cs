@@ -6,10 +6,13 @@ public class Medicine:BaseEntity
     public decimal Price { get; set; }
     public int CategoryId { get; set; }
     public int UserId { get; set;}
-    public int CreatedDate { get; set; }
+    public DateTime CreatedDate { get; set; }
 
 
-
+    public Medicine()
+    {
+        CreatedDate= DateTime.Now;
+    }
 
 
 
@@ -20,7 +23,7 @@ public class Medicine:BaseEntity
 
     public override string ToString()
     {
-        return $"Id : {Id} - Medicine name : {Name} - Category ID : {CategoryId} User Id : {UserId}";
+        return $"Id : {Id} - Medicine name : {Name} - Category ID : {CategoryId} - User Id : {UserId} - Date : {CreatedDate} ";
     }
 
 
