@@ -29,7 +29,7 @@ restart:
     switch (initialSelect)
     {
         case "0":
-            Console.WriteLine("============ Bye Byee.... ======");
+            Console.WriteLine("====== Bye Byee.... ======");
             return;
         case "1":
             Console.WriteLine("============ User Registration ======");
@@ -85,7 +85,7 @@ restart:
 
 
         case "2":
-            Console.WriteLine("============ User login ======");
+            Console.WriteLine("====== User login ======");
             Console.WriteLine("Please enter email:");
             string loginEmail = Console.ReadLine();
             Regex regexLogin = new Regex(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$");
@@ -116,7 +116,7 @@ restart:
 
 
         case "3":
-            Console.WriteLine("============ Admin Panel ======");
+            Console.WriteLine("======= Admin Panel ======");
             Console.WriteLine("Please enter Admin email:");
             string adminEmail = Console.ReadLine();
             Console.WriteLine("Please enter Admin password:");
@@ -157,6 +157,7 @@ restart:
 
     }
 start:
+    Console.WriteLine("=====================================================");
     Console.WriteLine("[1]-Create a new catagory");
     Console.WriteLine("[2]-Create a new Medicine");
     Console.WriteLine("[3]-List all medicine");
@@ -175,12 +176,12 @@ start:
     switch (select)
     {
         case "0":
-            Console.WriteLine("============ Bye Byee.... ======");
+            Console.WriteLine("====== Bye Byee.... ======");
             return;
 
         case "1":
             cgry:
-            Console.WriteLine("============ Create a new catagory ======");
+            Console.WriteLine("====== Create a new catagory ======");
             Console.WriteLine("Please enter category name:");
             string categoryName = Console.ReadLine();
             foreach (var item in DB.Categories)
@@ -199,7 +200,7 @@ start:
             goto start;
         case "2":
             mdn:
-            Console.WriteLine("============ Create a new Medicine ======");
+            Console.WriteLine("====== Create a new Medicine ======");
             foreach (var ctgry in DB.Categories)
             {
                 Console.WriteLine($" Catogry Name {ctgry.Name}   Catogory Id {ctgry.Id}");
@@ -243,13 +244,13 @@ start:
             goto start;
 
         case "3":
-            Console.WriteLine("============= List all medicine =========");
+            Console.WriteLine("======== List all medicine =========");
             medicineService.GetAllMedicines(UserLogin.Id);
             
 
             goto start;
         case "4":
-            Console.WriteLine("============= Update a medicine =========");
+            Console.WriteLine("========= Update a medicine =========");
             medicineService.GetAllMedicines(UserLogin.Id);
             Console.WriteLine("Please enter the ID of the medicine to update:");
             int updateId = int.Parse(Console.ReadLine());
@@ -282,7 +283,7 @@ start:
             goto start;
 
         case "5":
-            Console.WriteLine("============= Find medicine by ID =========");
+            Console.WriteLine("========= Find medicine by ID =========");
             Console.WriteLine("Please enter the ID of the medicine:");
 
             int findId = int.Parse(Console.ReadLine());
@@ -298,7 +299,7 @@ start:
 
             goto start;
         case "6":
-            Console.WriteLine("============= Find medicine by Name =========");
+            Console.WriteLine("========== Find medicine by Name =========");
             Console.WriteLine("Please enter the name of the medicine:");
             string findName = Console.ReadLine();
             try
@@ -314,7 +315,7 @@ start:
 
             goto start;
         case "7":
-            Console.WriteLine("============= Find medicine by catagory =========");
+            Console.WriteLine("========= Find medicine by catagory =========");
             foreach (var c in DB.Categories)
             {
                 Console.WriteLine($"Category Name :{c.Name} Category Id : {c.Id}");
@@ -333,10 +334,16 @@ start:
 
             goto start;
         case "8":
-            Console.WriteLine("============= Wiew Medicine =========");
+            Console.WriteLine("========= Wiew Medicine =========");
             medicineService.GetAllMedicines(UserLogin.Id);
 
 
+            goto start;
+        case "9":
+            foreach (var item in DB.Categories)
+            {
+                Console.WriteLine(item.Name);
+            }
             goto start;
         case "10":
 
