@@ -158,8 +158,9 @@ restart:
             try
             {
                 userService.RemoveUser(deleteEmail, deletePassword);
+                Console.Clear();
                 Console.WriteLine("User account deleted successfully!");
-                loggedInUser = null; 
+                
                 goto restart;
             }
             catch (NotFoundException ex)
