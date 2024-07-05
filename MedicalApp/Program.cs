@@ -11,10 +11,12 @@ User loggedInUser = null;
 
 while (loggedInUser == null)
 {
+    
     Console.WriteLine("-------Welcome Aqil's Hospital ....( '-' )------------");
     Console.WriteLine("======================================================");
     Console.WriteLine("[1]-User Registration");
     Console.WriteLine("[2]-User login");
+    Console.WriteLine("[3]-Admin Panel");
     Console.WriteLine("[0]-Exit");
 
     string initialSelect = Console.ReadLine();
@@ -25,6 +27,18 @@ while (loggedInUser == null)
         case "0":
             return;
         case "1":
+            Console.WriteLine("Please enter new name:");
+            string name = Console.ReadLine();
+            Regex nameRegex = new Regex(@"^[A-zA-Z]+$");
+            while (!nameRegex.IsMatch(name))
+            {
+                Console.WriteLine("Please enter correct new name!");
+                Console.WriteLine("Please enter new name:");
+                name = Console.ReadLine();
+            }
+
+
+
             Console.WriteLine("Please enter new email:");
             string email = Console.ReadLine();
             Regex regex = new Regex(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$");
@@ -44,7 +58,7 @@ while (loggedInUser == null)
                 password = Console.ReadLine();
             }
 
-            User user = new User { Email = email, Password = password };
+            User user = new User { Email = email, Password = password ,Fullname = name};
             userService.AddUser(user);
             Console.WriteLine("User registered successfully!");
             Console.Clear();
@@ -77,16 +91,57 @@ while (loggedInUser == null)
                 continue;
             }
             Console.Clear();
-                Console.WriteLine($"Welcome, {UserLogin.Email}!");
+                Console.WriteLine($"Welcome, {UserLogin.Fullname}!");
                 Console.WriteLine("======================================");
 
             break;
+
+
+        case "3":
+            Console.WriteLine("Please enter Admin email:");
+            string adminEmail = Console.ReadLine();
+            Console.WriteLine("Please enter Admin password:");
+
+            string adminPassword = Console.ReadLine();
+            if (adminEmail != "Admin@gmail.com"&& adminPassword!="Admin1234")
+            {
+                Console.WriteLine("Please ,wrinte correct Admin email and Admin password");
+                continue;
+            }
+
+
+            Console.WriteLine("welcome Admin Panel");
+            Console.WriteLine("=======================");
+            foreach (var logins in DB.Users)
+            {
+                Console.WriteLine($"Email : {logins.Email} ,Id :{logins.Id},Password{logins.Password}");
+            }
+            foreach (var medcn in DB.Medicines)
+            {
+                if( medcn == null)
+                {
+                    Console.WriteLine("medicine is not added");
+                }
+                else
+                {
+                    Console.WriteLine($"Medicine name : {medcn.Name} Medicine price : {medcn.Price} Medicine id : {medcn.Id}");
+                }
+                
+            }
+            continue;
+        default:
+            Console.Clear();
+            Console.WriteLine("Please ,select correct command");
+            continue;
+
+
+
     }
 start:
-    Console.WriteLine("[1]-Creat a new catagory");
-    Console.WriteLine("[2]-Creat a new Medicine");
-    Console.WriteLine("[3]-list all medicine");
-    Console.WriteLine("[4]-Uptude a medicine");
+    Console.WriteLine("[1]-Create a new catagory");
+    Console.WriteLine("[2]-Create a new Medicine");
+    Console.WriteLine("[3]-List all medicine");
+    Console.WriteLine("[4]-Update a medicine");
     Console.WriteLine("[5]-Find medicine by ID ");
     Console.WriteLine("[6]-Find medicine by Name ");
     Console.WriteLine("[7]-Find medicine by catagory ");
@@ -182,7 +237,6 @@ start:
             {
                 Console.WriteLine(ex.Message);
             }
-            Console.Clear();
 
             goto start;
 
@@ -200,7 +254,6 @@ start:
             {
                 Console.WriteLine(ex.Message);
             }
-            Console.Clear();
 
             goto start;
         case "6":
@@ -215,10 +268,14 @@ start:
             {
                 Console.WriteLine(ex.Message);
             }
-            Console.Clear();
+           
 
             goto start;
         case "7":
+            foreach (var c in DB.Categories)
+            {
+                Console.WriteLine($"Category Name :{c.Name} Category Id : {c.Id}");
+            }
             Console.WriteLine("Please enter the category ID:");
             int findCategoryId = int.Parse(Console.ReadLine());
             try
@@ -229,16 +286,16 @@ start:
             {
                 Console.WriteLine(ex.Message);
             }
-            Console.Clear();
+           
 
             goto start;
         case "8":
             medicines = medicineService.GetAllMedicines();
             foreach (var med in medicines)
             {
-                Console.WriteLine($"ID: {med.Id}, Name: {med.Name}, Price: {med.Price}, Category ID: {med.CategoryId}");
+                Console.WriteLine($"ID: {med.Id}, Name: {med.Name}, Price: {med.Price}$, Category ID: {med.CategoryId}");
             }
-            Console.Clear();
+            
 
             goto start;
         case "10":
