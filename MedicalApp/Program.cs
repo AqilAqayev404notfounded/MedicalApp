@@ -9,11 +9,11 @@ UserService userService = new UserService();
 CategoryService categoryService = new CategoryService();
 MedicineService medicineService = new MedicineService();
 User UserLogin = new User();
-User loggedInUser=null;
+User loggedInUser = null;
 
-while (loggedInUser==null)
+while (loggedInUser == null)
 {
-    
+
 
 restart:
     Console.WriteLine("-------Welcome Aqil's Hospital ....( '-' )------------");
@@ -21,6 +21,7 @@ restart:
     Console.WriteLine("[1]-User Registration");
     Console.WriteLine("[2]-User login");
     Console.WriteLine("[3]-Admin Panel");
+    Console.WriteLine("[4]-User accaunt delete");
     Console.WriteLine("[0]-Exit");
 
     string initialSelect = Console.ReadLine();
@@ -137,7 +138,7 @@ restart:
             }
             foreach (var medcn in DB.Medicines)
             {
-                if (medcn == null)
+                if (medcn.Name == null)
                 {
                     Console.WriteLine("medicine is not added");
                 }
@@ -148,6 +149,24 @@ restart:
 
             }
             continue;
+        case "4":
+            Console.WriteLine("====== Delete User Account ======");
+            Console.WriteLine("Please enter your email:");
+            string deleteEmail = Console.ReadLine();
+            Console.WriteLine("Please enter your password:");
+            string deletePassword = Console.ReadLine();
+            try
+            {
+                userService.RemoveUser(deleteEmail, deletePassword);
+                Console.WriteLine("User account deleted successfully!");
+                loggedInUser = null; 
+                goto restart;
+            }
+            catch (NotFoundException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            goto start;
         default:
             Console.Clear();
             Console.WriteLine("Please ,select correct command");
@@ -166,6 +185,7 @@ start:
     Console.WriteLine("[6]-Find medicine by Name ");
     Console.WriteLine("[7]-Find medicine by catagory ");
     Console.WriteLine("[8]-Wiew Medicine");
+    Console.WriteLine("[9]-List all catagories");
     Console.WriteLine("[0]-Exit");
     Console.WriteLine("[10]-Return to previous menu");
 
@@ -180,13 +200,13 @@ start:
             return;
 
         case "1":
-            cgry:
+        cgry:
             Console.WriteLine("====== Create a new catagory ======");
             Console.WriteLine("Please enter category name:");
             string categoryName = Console.ReadLine();
             foreach (var item in DB.Categories)
             {
-                if(item.Name == categoryName)
+                if (item.Name == categoryName)
                 {
                     Console.WriteLine("same catagory name");
                     goto cgry;
@@ -199,7 +219,7 @@ start:
 
             goto start;
         case "2":
-            mdn:
+        mdn:
             Console.WriteLine("====== Create a new Medicine ======");
             foreach (var ctgry in DB.Categories)
             {
@@ -207,9 +227,9 @@ start:
             }
             Console.WriteLine("Please enter medicine name:");
             string medicineName = Console.ReadLine();
-            foreach(var mdn in DB.Medicines)
+            foreach (var mdn in DB.Medicines)
             {
-                if (mdn.Name==medicineName)
+                if (mdn.Name == medicineName)
                 {
                     Console.WriteLine("same madicine name");
                     goto mdn;
@@ -246,7 +266,7 @@ start:
         case "3":
             Console.WriteLine("======== List all medicine =========");
             medicineService.GetAllMedicines(UserLogin.Id);
-            
+
 
             goto start;
         case "4":
@@ -342,7 +362,7 @@ start:
         case "9":
             foreach (var item in DB.Categories)
             {
-                Console.WriteLine(item.Name);
+                Console.WriteLine($"Category Name : {item.Name}");
             }
             goto start;
         case "10":
