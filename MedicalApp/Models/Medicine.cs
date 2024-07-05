@@ -7,4 +7,22 @@ public class Medicine:BaseEntity
     public int CategoryId { get; set; }
     public int UserId { get; set;}
     public int CreatedDate { get; set; }
+
+
+
+
+
+
+
+
+
+
+
+    public override string ToString()
+    {
+        return $"Id : {Id} - Medicine name : {Name} - Category ID : {CategoryId} User Id : {UserId}";
+    }
+
+
+
 }

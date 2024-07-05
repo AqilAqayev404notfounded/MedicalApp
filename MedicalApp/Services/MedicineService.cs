@@ -11,9 +11,15 @@ public class MedicineService
         Array.Resize(ref DB.Medicines, DB.Medicines.Length + 1);
         DB.Medicines[DB.Medicines.Length - 1] = medicine;
     }
-    public Medicine[] GetAllMedicines()
+    public void GetAllMedicines(int userid)
     {
-        return DB.Medicines;
+        foreach (var item in DB.Medicines)
+        {
+            if(item.UserId == userid)
+            {
+                Console.WriteLine(item);
+            }
+        }
     }
 
     public Medicine GetMedicineById(int id)

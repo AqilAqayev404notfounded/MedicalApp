@@ -7,11 +7,13 @@ UserService userService = new UserService();
 CategoryService categoryService = new CategoryService();
 MedicineService medicineService = new MedicineService();
 User UserLogin = new User();
-User loggedInUser = null;
+User loggedInUser=null;
 
-while (loggedInUser == null)
+while (loggedInUser==null)
 {
-    
+    SoundPlayer player = new SoundPlayer("welcome.wav");
+    player.PlaySync();
+restart:
     Console.WriteLine("-------Welcome Aqil's Hospital ....( '-' )------------");
     Console.WriteLine("======================================================");
     Console.WriteLine("[1]-User Registration");
@@ -58,7 +60,18 @@ while (loggedInUser == null)
                 password = Console.ReadLine();
             }
 
-            User user = new User { Email = email, Password = password ,Fullname = name};
+            foreach (var item in DB.Users)
+            {
+                if (item.Email == email)
+                {
+                    Console.Write("User already Registration");
+                    goto restart;
+                }
+
+            }
+
+
+            User user = new User { Email = email, Password = password, Fullname = name };
             userService.AddUser(user);
             Console.WriteLine("User registered successfully!");
             Console.Clear();
@@ -91,8 +104,8 @@ while (loggedInUser == null)
                 continue;
             }
             Console.Clear();
-                Console.WriteLine($"Welcome, {UserLogin.Fullname}!");
-                Console.WriteLine("======================================");
+            Console.WriteLine($"Welcome, {UserLogin.Fullname}!");
+            Console.WriteLine("======================================");
 
             break;
 
@@ -103,7 +116,7 @@ while (loggedInUser == null)
             Console.WriteLine("Please enter Admin password:");
 
             string adminPassword = Console.ReadLine();
-            if (adminEmail != "Admin@gmail.com"&& adminPassword!="Admin1234")
+            if (adminEmail != "Admin@gmail.com" && adminPassword != "Admin1234")
             {
                 Console.WriteLine("Please ,wrinte correct Admin email and Admin password");
                 continue;
@@ -114,19 +127,19 @@ while (loggedInUser == null)
             Console.WriteLine("=======================");
             foreach (var logins in DB.Users)
             {
-                Console.WriteLine($"Email : {logins.Email} ,Id :{logins.Id},Password{logins.Password}");
+                Console.WriteLine($"Name : {logins.Fullname} ,Email : {logins.Email} ,Id :{logins.Id} ,Password : {logins.Password}");
             }
             foreach (var medcn in DB.Medicines)
             {
-                if( medcn == null)
+                if (medcn == null)
                 {
                     Console.WriteLine("medicine is not added");
                 }
                 else
                 {
-                    Console.WriteLine($"Medicine name : {medcn.Name} Medicine price : {medcn.Price} Medicine id : {medcn.Id}");
+                    Console.WriteLine($"Medicine name : {medcn.Name} Medicine price : {medcn.Price}$ Medicine id : {medcn.Id}");
                 }
-                
+
             }
             continue;
         default:
@@ -193,7 +206,7 @@ start:
                 Name = medicineName,
                 Price = price,
                 CategoryId = categoryId,
-
+                UserId = UserLogin.Id
 
             };
             medicineService.CreateMedicine(medicine);
@@ -203,11 +216,8 @@ start:
             goto start;
 
         case "3":
-            Medicine[] medicines = medicineService.GetAllMedicines();
-            foreach (var med in medicines)
-            {
-                Console.WriteLine($"ID: {med.Id}, Name: {med.Name}, Price: {med.Price}, Category ID: {med.CategoryId}");
-            }
+            medicineService.GetAllMedicines(UserLogin.Id);
+            
 
             goto start;
         case "4":
@@ -243,12 +253,12 @@ start:
         case "5":
 
             Console.WriteLine("Please enter the ID of the medicine:");
-           
+
             int findId = int.Parse(Console.ReadLine());
             try
             {
                 Medicine foundMedicine = medicineService.GetMedicineById(findId);
-                Console.WriteLine($"ID: {foundMedicine.Id}, Name: {foundMedicine.Name}, Price: {foundMedicine.Price}, Category ID: {foundMedicine.CategoryId}");
+                Console.WriteLine($"ID: {foundMedicine.Id}, Name: {foundMedicine.Name}, Price: {foundMedicine.Price}$, Category ID: {foundMedicine.CategoryId}");
             }
             catch (NotFoundException ex)
             {
@@ -262,13 +272,13 @@ start:
             try
             {
                 Medicine foundMedicineByName = medicineService.GetMedicineByName(findName);
-                Console.WriteLine($"ID: {foundMedicineByName.Id}, Name: {foundMedicineByName.Name}, Price: {foundMedicineByName.Price}, Category ID: {foundMedicineByName.CategoryId}");
+                Console.WriteLine($"ID: {foundMedicineByName.Id}, Name: {foundMedicineByName.Name}, Price: {foundMedicineByName.Price}$, Category ID: {foundMedicineByName.CategoryId}");
             }
             catch (NotFoundException ex)
             {
                 Console.WriteLine(ex.Message);
             }
-           
+
 
             goto start;
         case "7":
@@ -280,26 +290,22 @@ start:
             int findCategoryId = int.Parse(Console.ReadLine());
             try
             {
-                 medicineService.GetMedicineByCategory(findCategoryId);
+                medicineService.GetMedicineByCategory(findCategoryId);
             }
             catch (NotFoundException ex)
             {
                 Console.WriteLine(ex.Message);
             }
-           
+
 
             goto start;
         case "8":
-            medicines = medicineService.GetAllMedicines();
-            foreach (var med in medicines)
-            {
-                Console.WriteLine($"ID: {med.Id}, Name: {med.Name}, Price: {med.Price}$, Category ID: {med.CategoryId}");
-            }
-            
+            medicineService.GetAllMedicines(UserLogin.Id);
+
 
             goto start;
         case "10":
-            Console.Clear();
+
 
             break;
 
