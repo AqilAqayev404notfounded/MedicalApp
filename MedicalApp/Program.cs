@@ -47,6 +47,8 @@ while (loggedInUser == null)
             User user = new User { Email = email, Password = password };
             userService.AddUser(user);
             Console.WriteLine("User registered successfully!");
+            Console.Clear();
+
             continue;
 
 
@@ -68,14 +70,16 @@ while (loggedInUser == null)
             try
             {
                 UserLogin = userService.Login(loginEmail, loginPassword);
-                Console.WriteLine($"Welcome, {UserLogin.Email}!");
-                Console.WriteLine("======================================");
             }
             catch (NotFoundException ex)
             {
                 Console.WriteLine(ex.Message);
                 continue;
             }
+            Console.Clear();
+                Console.WriteLine($"Welcome, {UserLogin.Email}!");
+                Console.WriteLine("======================================");
+
             break;
     }
 start:
@@ -91,6 +95,8 @@ start:
     Console.WriteLine("[10]-Return to previous menu");
 
     string select = Console.ReadLine();
+    Console.Clear();
+
 
     switch (select)
     {
@@ -103,6 +109,8 @@ start:
             Category category = new Category { Name = categoryName };
             categoryService.CreateCategory(category);
             Console.WriteLine("Category created successfully!");
+            Console.Clear();
+
             goto start;
         case "2":
             foreach (var ctgry in DB.Categories)
@@ -111,10 +119,20 @@ start:
             }
             Console.WriteLine("Please enter medicine name:");
             string medicineName = Console.ReadLine();
+
+            decimal price;
             Console.WriteLine("Please enter medicine price:");
-            decimal price = decimal.Parse(Console.ReadLine());
+            while (!decimal.TryParse(Console.ReadLine(), out price))
+            {
+                Console.WriteLine("Invalid input. Please enter a valid price:");
+            }
+
+            int categoryId;
             Console.WriteLine("Please enter category ID:");
-            int categoryId = int.Parse(Console.ReadLine());
+            while (!int.TryParse(Console.ReadLine(), out categoryId))
+            {
+                Console.WriteLine("Invalid input. Please enter a valid category ID:");
+            }
             Medicine medicine = new Medicine
             {
                 Name = medicineName,
@@ -125,6 +143,8 @@ start:
             };
             medicineService.CreateMedicine(medicine);
             Console.WriteLine("Medicine created successfully!");
+            Console.Clear();
+
             goto start;
 
         case "3":
@@ -133,6 +153,7 @@ start:
             {
                 Console.WriteLine($"ID: {med.Id}, Name: {med.Name}, Price: {med.Price}, Category ID: {med.CategoryId}");
             }
+
             goto start;
         case "4":
             Console.WriteLine("Please enter the ID of the medicine to update:");
@@ -161,6 +182,8 @@ start:
             {
                 Console.WriteLine(ex.Message);
             }
+            Console.Clear();
+
             goto start;
 
         case "5":
@@ -177,6 +200,8 @@ start:
             {
                 Console.WriteLine(ex.Message);
             }
+            Console.Clear();
+
             goto start;
         case "6":
             Console.WriteLine("Please enter the name of the medicine:");
@@ -190,6 +215,8 @@ start:
             {
                 Console.WriteLine(ex.Message);
             }
+            Console.Clear();
+
             goto start;
         case "7":
             Console.WriteLine("Please enter the category ID:");
@@ -202,6 +229,8 @@ start:
             {
                 Console.WriteLine(ex.Message);
             }
+            Console.Clear();
+
             goto start;
         case "8":
             medicines = medicineService.GetAllMedicines();
@@ -209,13 +238,19 @@ start:
             {
                 Console.WriteLine($"ID: {med.Id}, Name: {med.Name}, Price: {med.Price}, Category ID: {med.CategoryId}");
             }
+            Console.Clear();
+
             goto start;
         case "10":
+            Console.Clear();
+
             break;
 
 
         default:
             Console.WriteLine("Please ,select correct command");
+            Console.Clear();
+
             goto start;
     }
 }
