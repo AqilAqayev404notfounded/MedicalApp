@@ -40,6 +40,22 @@ public class UserService
             }
         }
         throw new NotFoundException("User not found or incorrect password");
+    } public void AdminRemoveUser(string email)
+    {
+        for (int i = 0; i < DB.Users.Length; i++)
+        {
+            if (DB.Users[i].Email == email)
+            {
+                for (int j = i; j < DB.Users.Length - 1; j++)
+                {
+                    DB.Users[j] = DB.Users[j + 1];
+                }
+                Array.Resize(ref DB.Users, DB.Users.Length - 1);
+                Console.WriteLine("User deleted successfully!");
+                return;
+            }
+        }
+        throw new NotFoundException("User not found or incorrect password");
     }
 
 }

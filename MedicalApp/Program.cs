@@ -51,7 +51,7 @@ restart:
             Regex regex = new Regex(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$");
             while (!regex.IsMatch(email))
             {
-                Console.WriteLine("Olmaz");
+                Console.WriteLine("Please enter correte new email!");
                 Console.WriteLine("Please enter new email:");
                 email = Console.ReadLine();
             }
@@ -129,26 +129,58 @@ restart:
                 continue;
             }
 
-
-            Console.WriteLine("welcome Admin Panel");
+        Admin:
+            Console.WriteLine("Welcome to Admin Panel");
             Console.WriteLine("=======================");
             foreach (var logins in DB.Users)
             {
-                Console.WriteLine($"Name : {logins.Fullname} ,Email : {logins.Email} ,Id :{logins.Id} ,Password : {logins.Password}");
+                Console.WriteLine($"Name: {logins.Fullname}, Email: {logins.Email}, Id: {logins.Id}, Password: {logins.Password}");
             }
             foreach (var medcn in DB.Medicines)
             {
                 if (medcn.Name == null)
                 {
-                    Console.WriteLine("medicine is not added");
+                    Console.WriteLine("No medicine added");
                 }
                 else
                 {
-                    Console.WriteLine($"Medicine name : {medcn.Name} Medicine price : {medcn.Price}$ Medicine id : {medcn.Id}");
+                    Console.WriteLine($"Medicine name: {medcn.Name}, Medicine price: {medcn.Price}$, Medicine id: {medcn.Id}");
                 }
-
+            }
+            Console.WriteLine("=========================================================");
+            Console.WriteLine("[1]-Remove user");
+            Console.WriteLine("[2]-Return to previous menu");
+            string select2 = Console.ReadLine();
+            switch (select2)
+            {
+                case "1":
+                    Console.WriteLine("Remove user");
+                    Console.WriteLine("Please enter user email:");
+                    string adminDeleteEmail = Console.ReadLine();
+                    try
+                    {
+                        userService.AdminRemoveUser(adminDeleteEmail);
+                        Console.Clear();
+                        Console.WriteLine("User account deleted successfully!");
+                        goto restart;
+                    }
+                    catch (NotFoundException ex)
+                    {
+                        Console.WriteLine(ex.Message);
+                    }
+                    goto Admin;
+                case "2":
+                    break;
+                default:
+                    Console.WriteLine("Please, select correct command");
+                    goto Admin;
             }
             continue;
+
+
+
+
+
         case "4":
             Console.WriteLine("====== Delete User Account ======");
             Console.WriteLine("Please enter your email:");
