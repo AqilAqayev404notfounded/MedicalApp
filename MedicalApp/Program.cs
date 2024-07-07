@@ -75,6 +75,16 @@ restart:
 
             }
 
+            foreach (var item in DB.Users)
+            {
+                if (item.Fullname == name)
+                {
+                    Console.Write("User already Registration");
+                    goto restart;
+                }
+
+            }
+
 
             User user = new User { Email = email, Password = password, Fullname = name };
             userService.AddUser(user);
@@ -170,8 +180,10 @@ restart:
                     }
                     goto Admin;
                 case "2":
+                    Console.Clear();
                     break;
                 default:
+
                     Console.WriteLine("Please, select correct command");
                     goto Admin;
             }
