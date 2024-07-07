@@ -23,7 +23,7 @@ public class Medicine:BaseEntity
 
     public override string ToString()
     {
-        return $"Id : {Id} - Medicine name : {Name} - Category ID : {CategoryId} - User Id : {UserId} - Date : {CreatedDate} ";
+        return $"Id : {Id} - Medicine name : {Name} - Price : {Price}$ - Category ID : {CategoryId} - User Id : {UserId} - Date : {CreatedDate} ";
     }
 
 

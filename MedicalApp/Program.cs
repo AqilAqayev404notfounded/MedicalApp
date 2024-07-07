@@ -3,6 +3,8 @@ using MedicalApp.Models;
 using MedicalApp.Services;
 using System.Data.Common;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+
 
 
 UserService userService = new UserService();
@@ -16,7 +18,14 @@ while (loggedInUser == null)
 
 
 restart:
-    Console.WriteLine("-------Welcome Aqil's Hospital ....( '-' )------------");
+    string message = "-------Welcome Aqil's Hospital ....( '-' )------------";
+    foreach (char c in message)
+    {
+        Console.Write(c);
+        await Task.Delay(40); 
+    }
+    Console.WriteLine(); 
+    
     Console.WriteLine("======================================================");
     Console.WriteLine("[1]-User Registration");
     Console.WriteLine("[2]-User login");
