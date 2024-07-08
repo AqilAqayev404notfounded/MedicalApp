@@ -269,7 +269,7 @@ start:
                     goto cgry;
                 }
             }
-            Category category = new Category { Name = categoryName };
+            Category category = new Category { Name = categoryName.Trim() };
             categoryService.CreateCategory(category);
             Console.WriteLine("Category created successfully!");
             Console.Clear();
