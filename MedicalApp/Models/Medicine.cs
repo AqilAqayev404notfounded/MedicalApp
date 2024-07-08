@@ -2,8 +2,20 @@
 
 public class Medicine:BaseEntity
 {
+    private decimal price;
     public string Name { get; set; }
-    public decimal Price { get; set; }
+    public decimal Price 
+    {
+        get => price;
+        set
+        {
+            if (value<0)
+            {
+                throw new Exception("Price is negative");
+            }
+            price = value;
+        }
+    }
     public int CategoryId { get; set; }
     public int UserId { get; set;}
     public DateTime CreatedDate { get; set; }

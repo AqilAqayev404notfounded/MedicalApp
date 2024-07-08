@@ -21,10 +21,10 @@ restart:
     foreach (char c in message)
     {
         Console.Write(c);
-        await Task.Delay(40); 
+        await Task.Delay(40);
     }
-    Console.WriteLine(); 
-    
+    Console.WriteLine();
+
     Console.WriteLine("======================================================");
     Console.WriteLine("[1]-User Registration");
     Console.WriteLine("[2]-User login");
@@ -92,7 +92,7 @@ restart:
                 }
 
             }
-             
+
 
             User user = new User { Email = email.ToLower(), Password = password, Fullname = name };
             userService.AddUser(user);
@@ -212,12 +212,13 @@ restart:
                 userService.RemoveUser(deleteEmail.ToLower(), deletePassword);
                 Console.Clear();
                 Console.WriteLine("User account deleted successfully!");
-                
+
                 goto restart;
             }
             catch (NotFoundException ex)
             {
                 Console.WriteLine(ex.Message);
+                goto restart;
             }
             goto start;
         default:
@@ -257,7 +258,7 @@ start:
             Console.WriteLine("====== Create a new catagory ======");
             Console.WriteLine("Please enter category name:");
             string categoryName = Console.ReadLine();
-           if (userService.NoSpace(categoryName))
+            if (userService.NoSpace(categoryName))
             {
                 goto cgry;
             }
@@ -311,17 +312,25 @@ start:
             {
                 Console.WriteLine("Invalid input. Please enter a valid category ID:");
             }
-            Medicine medicine = new Medicine
+            try
             {
-                Name = medicineName,
-                Price = price,
-                CategoryId = categoryId,
-                UserId = UserLogin.Id
+                Medicine medicine = new Medicine
+                {
+                    Name = medicineName.Trim(),
+                    Price = price,
+                    CategoryId = categoryId,
+                    UserId = UserLogin.Id
 
-            };
-            medicineService.CreateMedicine(medicine);
-            Console.WriteLine("Medicine created successfully!");
-            Console.Clear();
+                };
+                medicineService.CreateMedicine(medicine);
+                Console.WriteLine("Medicine created successfully!");
+                Console.Clear();
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
 
             goto start;
 
@@ -332,7 +341,7 @@ start:
 
             goto start;
         case "4":
-            uptd:
+        uptd:
             Console.WriteLine("========= Update a medicine =========");
             medicineService.GetAllMedicines(UserLogin.Id);
             Console.WriteLine("Please enter the ID of the medicine to update:");
@@ -342,11 +351,11 @@ start:
             {
                 Console.WriteLine("Please enter new medicine name:");
                 string newName = Console.ReadLine();
-            if (userService.NoSpace(newName))
-            {
-                Console.WriteLine("same madicine name");
-                goto uptd;
-            }
+                if (userService.NoSpace(newName))
+                {
+                    Console.WriteLine("same madicine name");
+                    goto uptd;
+                }
                 Console.WriteLine("Please enter new medicine price:");
                 decimal newPrice = decimal.Parse(Console.ReadLine());
                 Console.WriteLine("Please enter new category ID:");
@@ -354,7 +363,7 @@ start:
 
                 Medicine updatedMedicine = new Medicine
                 {
-                    Name = newName,
+                    Name = newName.Trim(),
                     Price = newPrice,
                     CategoryId = newCategoryId,
                     UserId = UserLogin.Id,
@@ -365,6 +374,10 @@ start:
                 Console.WriteLine("Medicine updated successfully!");
             }
             catch (NotFoundException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
             }
@@ -385,6 +398,10 @@ start:
             {
                 Console.WriteLine(ex.Message);
             }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
 
             goto start;
         case "6":
@@ -393,10 +410,14 @@ start:
             string findName = Console.ReadLine();
             try
             {
-                Medicine foundMedicineByName = medicineService.GetMedicineByName(findName);
+                Medicine foundMedicineByName = medicineService.GetMedicineByName(findName.Trim());
                 Console.WriteLine($"ID: {foundMedicineByName.Id}, Name: {foundMedicineByName.Name}, Price: {foundMedicineByName.Price}$, Category ID: {foundMedicineByName.CategoryId} date {foundMedicineByName.CreatedDate} ");
             }
             catch (NotFoundException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
             }
