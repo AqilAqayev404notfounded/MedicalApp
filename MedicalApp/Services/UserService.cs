@@ -57,5 +57,10 @@ public class UserService
         }
         throw new NotFoundException("User not found or incorrect password");
     }
+    public bool NoSpace(string a) 
+    {
+        return string.IsNullOrWhiteSpace(a);
+
+    }
 
 }

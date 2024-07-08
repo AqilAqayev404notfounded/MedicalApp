@@ -1,9 +1,8 @@
 ﻿using MedicalApp.Exceptions;
 using MedicalApp.Models;
 using MedicalApp.Services;
-using System.Data.Common;
+using System.Security.Cryptography;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 
 
@@ -11,9 +10,9 @@ UserService userService = new UserService();
 CategoryService categoryService = new CategoryService();
 MedicineService medicineService = new MedicineService();
 User UserLogin = new User();
-User loggedInUser = null;
 
-while (loggedInUser == null)
+
+while (true)
 {
 
 
@@ -93,9 +92,9 @@ restart:
                 }
 
             }
+             
 
-
-            User user = new User { Email = email, Password = password, Fullname = name };
+            User user = new User { Email = email.ToLower(), Password = password, Fullname = name };
             userService.AddUser(user);
             Console.WriteLine("User registered successfully!");
             Console.Clear();
@@ -121,7 +120,7 @@ restart:
             string loginPassword = Console.ReadLine();
             try
             {
-                UserLogin = userService.Login(loginEmail, loginPassword);
+                UserLogin = userService.Login(loginEmail.ToLower(), loginPassword);
             }
             catch (NotFoundException ex)
             {
@@ -178,7 +177,7 @@ restart:
                     string adminDeleteEmail = Console.ReadLine();
                     try
                     {
-                        userService.AdminRemoveUser(adminDeleteEmail);
+                        userService.AdminRemoveUser(adminDeleteEmail.ToLower());
                         Console.Clear();
                         Console.WriteLine("User account deleted successfully!");
                         goto restart;
@@ -210,7 +209,7 @@ restart:
             string deletePassword = Console.ReadLine();
             try
             {
-                userService.RemoveUser(deleteEmail, deletePassword);
+                userService.RemoveUser(deleteEmail.ToLower(), deletePassword);
                 Console.Clear();
                 Console.WriteLine("User account deleted successfully!");
                 
@@ -258,6 +257,10 @@ start:
             Console.WriteLine("====== Create a new catagory ======");
             Console.WriteLine("Please enter category name:");
             string categoryName = Console.ReadLine();
+           if (userService.NoSpace(categoryName))
+            {
+                goto cgry;
+            }
             foreach (var item in DB.Categories)
             {
                 if (item.Name == categoryName)
@@ -281,6 +284,11 @@ start:
             }
             Console.WriteLine("Please enter medicine name:");
             string medicineName = Console.ReadLine();
+            if (userService.NoSpace(medicineName))
+            {
+                Console.WriteLine("Please ,enter valid name");
+                goto mdn;
+            }
             foreach (var mdn in DB.Medicines)
             {
                 if (mdn.Name == medicineName)
@@ -324,14 +332,21 @@ start:
 
             goto start;
         case "4":
+            uptd:
             Console.WriteLine("========= Update a medicine =========");
             medicineService.GetAllMedicines(UserLogin.Id);
             Console.WriteLine("Please enter the ID of the medicine to update:");
             int updateId = int.Parse(Console.ReadLine());
+
             try
             {
                 Console.WriteLine("Please enter new medicine name:");
                 string newName = Console.ReadLine();
+            if (userService.NoSpace(newName))
+            {
+                Console.WriteLine("same madicine name");
+                goto uptd;
+            }
                 Console.WriteLine("Please enter new medicine price:");
                 decimal newPrice = decimal.Parse(Console.ReadLine());
                 Console.WriteLine("Please enter new category ID:");
